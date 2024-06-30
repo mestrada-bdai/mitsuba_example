@@ -1,0 +1,116 @@
+<scene version="3.0.0">
+
+<!-- Defaults, these can be set via the command line: -Darg=value -->
+
+	<default name="spp" value="128"/>
+	<default name="spp" value="2000"/>
+	<default name="resx" value="480"/>
+	<default name="resy" value="256"/>
+	<default name="max_depth" value="32" />
+
+<!-- Camera and Rendering Parameters -->
+
+	<integrator type="volpath">
+		<integer name="max_depth" value="$max_depth"/>
+		<boolean name="hide_emitters" value="True"/>
+	</integrator>
+
+	<sensor type="perspective">
+		<string name="fov_axis" value="x"/>
+		<float name="fov" value="23.913168"/>
+		<float name="near_clip" value="0.100000"/>
+		<float name="far_clip" value="1000.000000"/>
+		<transform name="to_world">
+			<rotate x="1" angle="179.999991348578"/>
+			<rotate y="1" angle="5.008956130975331e-06"/>
+			<rotate z="1" angle="180.00000500895632"/>
+			<translate value="-0.081774 0.251525 15.190189"/>
+		</transform>
+		<sampler type="independent">
+			<integer name="sample_count" value="$spp"/>
+		</sampler>
+		<film type="hdrfilm">
+			<integer name="width" value="$resx"/>
+			<integer name="height" value="$resy"/>
+		</film>
+	</sensor>
+
+<!-- Materials -->
+
+	<bsdf type="twosided" id="mat-Floor">
+		<bsdf type="principled">
+			<!-- <rgb value="0.202354 0.55000 0.554035" name="base_color"/> -->
+			<rgb value="0.602354 1.0 1.0" name="base_color"/>
+		</bsdf>
+	</bsdf>
+	<bsdf type="null" id="mat-Leaf"/>
+
+    <medium id="medium1" type="homogeneous">
+        <float name="scale" value="50"/>
+        <phase type="hg">
+			<float name="g" value="0.4"/>
+		</phase>
+
+        <volume name="sigma_t" type="constvolume">
+            <float name="value" value="0.95"/>
+        </volume>
+        <volume name="albedo" type="constvolume">
+            <rgb name="value" value="0.7, 0.76, 0.1"/>
+        </volume>
+    </medium>
+
+<!-- Emitters -->
+
+	<shape type="rectangle">
+		<boolean name="flip_normals" value="true"/>
+		<transform name="to_world">
+			<matrix value="1.273643 0.000000 0.000000 0.000000 0.000000 0.000000 1.273643 2.547201 0.000000 -1.273643 0.000000 2.810797 0.000000 0.000000 0.000000 1.000000"/>
+			<translate value="0 0 -2.0"/>
+        </transform>
+		<emitter type="area">
+			<rgb value="11.0 11.0 11.0" name="radiance"/>
+		</emitter>
+		<bsdf type="null"/>
+	</shape>
+	<shape type="rectangle">
+		<boolean name="flip_normals" value="true"/>
+		<transform name="to_world">
+			<matrix value="0.240836 -0.516154 0.533394 4.782585 -0.711202 0.000000 0.321119 1.810554 -0.212404 -0.585244 -0.470425 -2.808902 0.000000 0.000000 0.000000 1.000000"/>
+			<translate value="0 0 -0.5"/>
+        </transform>
+		<emitter type="area">
+			<rgb value="8.0 8.0 8.0" name="radiance"/>
+		</emitter>
+		<bsdf type="null"/>
+	</shape>
+	<shape type="rectangle">
+		<boolean name="flip_normals" value="true"/>
+		<transform name="to_world">
+			<matrix value="0.203478 0.418617 -0.626325 -4.703727 0.742154 0.000000 0.241108 1.635040 0.129344 -0.658548 -0.398133 -1.984299 0.000000 0.000000 0.000000 1.000000"/>
+			<translate value="0 0 -0.5"/>
+        </transform>
+		<emitter type="area">
+			<rgb value="8.0 8.0 8.0" name="radiance"/>
+		</emitter>
+		<bsdf type="null"/>
+	</shape>
+
+<!-- Shapes -->
+
+	<shape type="obj" id="hand">
+		<string name="filename" value="meshes/bunny.obj"/>
+		<boolean name="face_normals" value="true"/>
+		<transform name="to_world">
+			<translate value="0.0 -0.1 0.0"/>
+			<scale value="15"/>
+		</transform>
+		<ref id="mat-Leaf" name="bsdf"/>
+        <ref name="interior" id="medium1"/>
+	</shape>
+
+	<shape type="ply">
+		<string name="filename" value="meshes/Floor.ply"/>
+		<ref id="mat-Floor" name="bsdf"/>
+	</shape>
+
+</scene>
